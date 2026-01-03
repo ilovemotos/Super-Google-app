@@ -1,0 +1,1398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Super Google - Your Ultimate Search Companion</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #4285F4;
+            --secondary-color: #34A853;
+            --accent-color: #FBBC05;
+            --text-dark: #202124;
+            --text-light: #5f6368;
+            --background-light: #f8f9fa;
+            --background-main: white;
+            --card-background: white;
+            --form-background: #f8f9fa;
+            --text-color: #202124;
+            --border-color: #ddd;
+        }
+
+        .dark-mode {
+            --primary-color: #5c96ff;
+            --secondary-color: #4cc669;
+            --accent-color: #fdca3a;
+            --text-dark: #e0e0e0;
+            --text-light: #a0a0a0;
+            --background-light: #2c2c2c;
+            --background-main: #121212;
+            --card-background: #1e1e1e;
+            --form-background: #2a2a2a;
+            --text-color: #e0e0e0;
+            --border-color: #444;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            transition: all 0.3s ease;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            color: var(--text-color);
+        }
+
+        .container {
+            background: var(--card-background);
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            padding: 40px;
+            max-width: 800px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .logo {
+            font-size: 2.5rem;
+            font-weight: 600;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 15px;
+        }
+
+        .search-container {
+            display: flex;
+            margin: 30px 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border-radius: 50px;
+            overflow: hidden;
+        }
+
+        .search-input {
+            flex-grow: 1;
+            padding: 15px 20px;
+            border: none;
+            font-size: 1rem;
+            background-color: var(--form-background);
+            color: var(--text-color);
+        }
+
+        .search-button {
+            padding: 15px 25px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        .shortcuts {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 20px;
+        }
+
+        .shortcut {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: var(--text-color);
+            padding: 15px;
+            border-radius: 12px;
+            background-color: var(--background-light);
+        }
+
+        .shortcut:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        }
+
+        .shortcut img {
+            width: 60px;
+            height: 60px;
+            margin-bottom: 10px;
+            border-radius: 50%;
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.6);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .overlay-content {
+            background: var(--card-background);
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 500px;
+            width: 100%;
+            position: relative;
+            text-align: left;
+            color: var(--text-color);
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--text-light);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--text-light);
+        }
+
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background-color: var(--form-background);
+            color: var(--text-color);
+        }
+
+        .form-submit {
+            background-color: var(--secondary-color);
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        .footer {
+            margin-top: 30px;
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        #signout-tab {
+            display: none;
+        }
+
+        .reviews {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        .review {
+            background-color: var(--background-light);
+            border-radius: 10px;
+            padding: 15px;
+            width: 48%;
+            text-align: left;
+            color: var(--text-color);
+        }
+
+        .review-stars {
+            color: #FFD700;
+            margin-bottom: 10px;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+            }
+            .shortcuts {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .reviews {
+                flex-direction: column;
+            }
+            .review {
+                width: 100%;
+                margin-bottom: 10px;
+            }
+        }
+
+        /* Translator UI Improvements */
+        .translator-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .translator-header {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--text-color);
+        }
+
+        .translator-select {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .translator-select select {
+            flex: 1;
+            margin: 0 10px;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            background-color: var(--form-background);
+            color: var(--text-color);
+        }
+
+        .translator-textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            height: 100px;
+            background-color: var(--form-background);
+            color: var(--text-color);
+        }
+
+        .translate-button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        .translated-output {
+            background-color: var(--background-light);
+            border-radius: 8px;
+            padding: 12px;
+            height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-color);
+        }
+
+        /* Privacy consent styles */
+        .privacy-consent {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: rgba(0, 0, 0, 0.9);
+            color: white;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 2000;
+            transform: translateY(100%);
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .privacy-consent.show {
+            transform: translateY(0);
+        }
+
+        .privacy-consent-content {
+            flex-grow: 1;
+            margin-right: 20px;
+        }
+
+        .privacy-consent h3 {
+            margin: 0 0 10px 0;
+            font-size: 1.2rem;
+        }
+
+        .privacy-consent p {
+            margin: 0;
+            font-size: 0.9rem;
+        }
+
+        .privacy-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .privacy-button {
+            padding: 8px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: background-color 0.3s ease;
+        }
+
+        .accept-button {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+
+        .decline-button {
+            background-color: transparent;
+            border: 1px solid white;
+            color: white;
+        }
+
+        .privacy-button:hover {
+            opacity: 0.9;
+        }
+
+        .privacy-policy-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 2001;
+        }
+
+        .privacy-policy-content {
+            background-color: var(--card-background);
+            padding: 30px;
+            border-radius: 10px;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+            color: var(--text-color);
+        }
+        
+        /* Reviews container styles */
+        .reviews-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .reviews-container .review {
+            width: 100%;
+            background-color: var(--background-light);
+            border-radius: 10px;
+            padding: 15px;
+            text-align: left;
+        }
+
+        /* Calculator styles */
+        .calculator-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            width: 100%;
+        }
+
+        .calculator-display {
+            width: 100%;
+            padding: 20px;
+            font-size: 1.5rem;
+            text-align: right;
+            background-color: var(--background-light);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            margin-bottom: 10px;
+            color: var(--text-color);
+        }
+
+        .calculator-keys {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+
+        .calculator-key {
+            padding: 15px;
+            background-color: var(--background-light);
+            border: none;
+            border-radius: 8px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: var(--text-color);
+        }
+
+        .calculator-key:hover {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .calculator-key.operator {
+            background-color: var(--accent-color);
+            color: var(--text-dark);
+        }
+
+        .calculator-key.equals {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+
+        .calculator-key.clear {
+            background-color: #f44336;
+            color: white;
+        }
+
+        .calculator-instructions {
+            margin-top: 15px;
+            font-size: 0.9rem;
+            color: var(--text-light);
+            text-align: center;
+        }
+
+        /* Dark mode toggle switch */
+        .theme-switch-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .theme-switch {
+            display: inline-block;
+            height: 34px;
+            position: relative;
+            width: 60px;
+        }
+
+        .theme-switch input {
+            display: none;
+        }
+
+        .slider {
+            background-color: #ccc;
+            bottom: 0;
+            cursor: pointer;
+            left: 0;
+            position: absolute;
+            right: 0;
+            top: 0;
+            transition: .4s;
+            border-radius: 34px;
+        }
+
+        .slider:before {
+            background-color: white;
+            bottom: 4px;
+            content: "";
+            height: 26px;
+            left: 4px;
+            position: absolute;
+            transition: .4s;
+            width: 26px;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: var(--primary-color);
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+
+        .theme-switch-wrapper span {
+            margin-left: 10px;
+            font-size: 0.9rem;
+            color: var(--text-color);
+        }
+
+        .mode-icon {
+            font-size: 1.2rem;
+            margin: 0 10px;
+        }
+
+        /* Form toggle link styles */
+        .form-toggle {
+            display: block;
+            text-align: center;
+            margin-top: 15px;
+            color: var(--primary-color);
+            cursor: pointer;
+        }
+
+        .form-toggle:hover {
+            text-decoration: underline;
+        }
+
+        /* Error message styles */
+        .error-message {
+            color: #f44336;
+            font-size: 0.9rem;
+            margin-top: 5px;
+            display: none;
+        }
+.overlay-content {
+    background: var(--card-background);
+    border-radius: 20px;
+    padding: 40px;
+    max-width: 500px;
+    width: 100%;
+    position: relative;
+    text-align: left;
+    color: var(--text-color);
+    max-height: 80vh; /* Set maximum height to 80% of viewport height */
+    overflow-y: auto; /* Enable vertical scrolling when content exceeds height */
+}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="theme-switch-wrapper">
+            <span class="mode-icon">☀️</span>
+            <label class="theme-switch" for="checkbox">
+                <input type="checkbox" id="checkbox" />
+                <div class="slider"></div>
+            </label>
+            <span class="mode-icon">🌙</span>
+        </div>
+
+        <div class="logo">Super Google</div>
+        <p>Your Ultimate Search Companion</p>
+        
+        <form id="search-form" action="https://www.google.com/search" method="GET" target="_blank">
+            <div class="search-container">
+                <input type="text" class="search-input" name="q" placeholder="Search the web..." required>
+                <button type="submit" class="search-button">Search</button>
+            </div>
+        </form>
+
+        <div class="shortcuts">
+            <a href="https://www.google.com" class="shortcut" target="_blank">
+                <img src="https://www.google.com/favicon.ico" alt="Google">
+                <span>Google</span>
+            </a>
+            <a href="https://www.youtube.com" class="shortcut" target="_blank">
+                <img src="https://www.youtube.com/favicon.ico" alt="YouTube">
+                <span>YouTube</span>
+            </a>
+            <a href="https://mail.google.com" class="shortcut" target="_blank">
+                <img src="https://ssl.gstatic.com/ui/v1/icons/mail/rfr/gmail.ico" alt="Gmail">
+                <span>Gmail</span>
+            </a>
+            <a href="https://www.github.com" class="shortcut" target="_blank">
+                <img src="https://github.com/favicon.ico" alt="GitHub">
+                <span>GitHub</span>
+            </a>
+            <a href="https://classroom.google.com" class="shortcut" target="_blank">
+                <img src="https://classroom.google.com/favicon.ico" alt="Google Classroom">
+                <span>Classroom</span>
+            </a>
+            <a href="#" id="mission-tab" class="shortcut">
+                <span>🎯</span>
+                <span>Mission</span>
+            </a>
+            <a href="#" id="updates-tab" class="shortcut">
+                <span>🔄</span>
+                <span>Updates</span>
+            </a>
+            <a href="#" id="contact-tab" class="shortcut">
+                <span>📧</span>
+                <span>Contact</span>
+            </a>
+            <a href="#" id="reviews-tab" class="shortcut">
+                <span>⭐</span>
+                <span>Reviews</span>
+            </a>
+            <a href="#" id="signin-tab" class="shortcut">
+                <span>🔐</span>
+                <span>Sign In</span>
+            </a>
+            <a href="#" id="signup-tab" class="shortcut">
+                <span>📝</span>
+                <span>Sign Up</span>
+            </a>
+            <a href="#" id="signout-tab" class="shortcut" style="display: none;">
+                <span>🚪</span>
+                <span>Sign Out</span>
+            </a>
+            <a href="#" id="translator-tab" class="shortcut">
+                <span>🌐</span>
+                <span>Translator</span>
+            </a>
+            <a href="#" id="calculator-tab" class="shortcut">
+                <span>🧮</span>
+                <span>Calculator</span>
+            </a>
+        </div>
+
+        <div class="footer">
+            © 2025 Super Google | Created by Andrey Gorbenko
+        </div>
+    </div>
+
+    <!-- Overlay Containers -->
+    <div id="mission-overlay" class="overlay" style="display: none;">
+        <div class="overlay-content">
+            <span class="close-btn" onclick="closeOverlay('mission-overlay')">×</span>
+            <h2>Our Mission</h2>
+            <p>At Super Google, we are committed to revolutionizing the way people search, discover, and interact with information online. Our mission is to:</p>
+            <ul style="margin-top: 15px; margin-left: 20px;">
+                <li style="margin-bottom: 10px;"><strong>Empower Knowledge:</strong> Provide intuitive tools that make information accessible to everyone, regardless of technical expertise.</li>
+                <li style="margin-bottom: 10px;"><strong>Enhance Productivity:</strong> Integrate essential utilities like translation, calculation, and quick shortcuts to streamline your daily workflow.</li>
+                <li style="margin-bottom: 10px;"><strong>Prioritize User Experience:</strong> Create beautiful, responsive interfaces that are a joy to use on any device.</li>
+                <li style="margin-bottom: 10px;"><strong>Respect Privacy:</strong> Maintain transparent data practices and prioritize user control over personal information.</li>
+                <li><strong>Foster Innovation:</strong> Continuously evolve our platform based on user feedback and technological advancements.</li>
+            </ul>
+            <p style="margin-top: 15px;">We believe that search is more than just finding answers—it's about creating connections, inspiring discovery, and transforming how we interact with the digital world.</p>
+        
+   #mission-overlay .overlay-content,
+#updates-overlay .overlay-content,
+#reviews-overlay .overlay-content {
+    max-height: 80vh;
+    overflow-y: auto;
+}
+        </div>
+    </div>
+
+    <div id="updates-overlay" class="overlay" style="display: none;">
+        <div class="overlay-content">
+            <span class="close-btn" onclick="closeOverlay('updates-overlay')">×</span>
+            <h2>Recent Updates</h2>
+            <ul>
+                <li>Added new Sign Up feature with persistent account storage</li>
+                <li>Added better Privacy & Cookie Policy</li>
+                <li>Added Dark Mode feature with toggle switch</li>
+                <li>Added keyboard-friendly Calculator feature</li>
+                <li>Enhanced mission statement with more detailed information</li>
+                <li>Redesigned Translator interface</li>
+                <li>Added easter egg in super translator</li>
+                <li>Replaced Amazon.es with Google Classroom shortcut</li>
+                <li>Added Reviews tab for better feedback visibility</li>
+            </ul>
+        </div>
+    </div>
+
+    <div id="contact-overlay" class="overlay">
+        <div class="overlay-content">
+            <span class="close-btn" onclick="closeOverlay('contact-overlay')">×</span>
+            <h2>Contact Us</h2>
+            <form id="contact-form">
+                <div class="form-group">
+                    <label for="contact-name">Name</label>
+                    <input type="text" id="contact-name" required>
+                </div>
+                <div class="form-group">
+                    <label for="contact-email">Email</label>
+                    <input type="email" id="contact-email" required>
+                </div>
+                <div class="form-group">
+                    <label for="contact-message">Message</label>
+                    <textarea id="contact-message" rows="4" required></textarea>
+                </div>
+                <button type="submit" class="form-submit">Send Message</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="reviews-overlay" class="overlay" style="display: none;">
+        <div class="overlay-content">
+            <span class="close-btn" onclick="closeOverlay('reviews-overlay')">×</span>
+            <h2>Customer Reviews</h2>
+            <div class="reviews-container">
+                <div class="review">
+                    <div class="review-stars">★★★★★</div>
+                    <p><strong>Umut O.</strong> says: "Super Google is incredibly intuitive and user-friendly! The interface is clean, and the search functionality is top-notch. Highly recommended!"</p>
+                </div>
+                <div class="review">
+                    <div class="review-stars">★★★★★</div>
+                    <p><strong>Gonzalo MEM.</strong> says: "Amazing search experience! The shortcuts are super convenient, and the design is sleek. This is now my go-to search companion!"</p>
+                </div>
+                <div class="review">
+                    <div class="review-stars">★★★★★</div>
+                    <p><strong>Sarah J.</strong> says: "The dark mode feature is a game-changer! So much easier on the eyes during late-night browsing sessions. Love the thoughtful design!"</p>
+                </div>
+                <div class="review">
+                    <div class="review-stars">★★★★★</div>
+                    <p><strong>Alex P.</strong> says: "I love how my account stays signed in even after I close the tab. The new sign-up feature is really convenient for regular users like me!"</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="signin-overlay" class="overlay" style="display: none;">
+        <div class="overlay-content">
+            <span class="close-btn" onclick="closeOverlay('signin-overlay')">×</span>
+            <h2>Sign In</h2>
+            <form id="signin-form">
+                <div class="form-group">
+                    <label for="signin-email">Email</label>
+                    <input type="email" id="signin-email" required>
+                    <div class="error-message" id="signin-email-error"></div>
+                </div>
+                <div class="form-group">
+                    <label for="signin-password">Password</label>
+                    <input type="password" id="signin-password" required>
+                    <div class="error-message" id="signin-password-error"></div>
+                </div>
+                <button type="submit" class="form-submit">Sign In</button>
+                <div class="error-message" id="signin-general-error"></div>
+                <div class="form-toggle" id="signin-to-signup">Don't have an account? Sign up here</div>
+            </form>
+        </div>
+    </div>
+
+    <div id="signup-overlay" class="overlay" style="display: none;">
+        <div class="overlay-content">
+            <span class="close-btn" onclick="closeOverlay('signup-overlay')">×</span>
+            <h2>Sign Up</h2>
+            <form id="signup-form">
+                <div class="form-group">
+                    <label for="signup-name">Full Name</label>
+                    <input type="text" id="signup-name" required>
+                </div>
+                <div class="form-group">
+                    <label for="signup-email">Email</label>
+                    <input type="email" id="signup-email" required>
+                    <div class="error-message" id="signup-email-error"></div>
+                </div>
+                <div class="form-group">
+                    <label for="signup-password">Password</label>
+                    <input type="password" id="signup-password" required>
+                    <div class="error-message" id="signup-password-error"></div>
+                </div>
+                <div class="form-group">
+                    <label for="signup-confirm-password">Confirm Password</label>
+                    <input type="password" id="signup-confirm-password" required>
+                    <div class="error-message" id="signup-confirm-error"></div>
+                </div>
+                <button type="submit" class="form-submit">Create Account</button>
+                <div class="form-toggle" id="signup-to-signin">Already have an account? Sign in here</div>
+            </form>
+        </div>
+    </div>
+
+    <div id="translator-overlay" class="overlay" style="display: none;">
+        <div class="overlay-content">
+            <span class="close-btn" onclick="closeOverlay('translator-overlay')">×</span>
+            <h2 class="translator-header">Super Translator</h2>
+            <div class="translator-container">
+                <div class="translator-select">
+                    <select id="source-lang" class="p-2 rounded border border-gray-300 flex-1">
+                        <option value="en">English</option>
+                        <option value="es">Spanish</option>
+                        <option value="fr">French</option>
+                        <option value="de">German</option>
+                        <option value="it">Italian</option>
+                        <option value="pt">Portuguese</option>
+                        <option value="ru">Russian</option>
+                        <option value="zh">Chinese</option>
+                        <option value="ja">Japanese</option>
+                        <option value="ko">Korean</option>
+                    </select>
+                    <button id="swap-languages" class="p-2 rounded-full hover:bg-gray-100">🔄</button>
+                    <select id="target-lang" class="p-2 rounded border border-gray-300 flex-1">
+                        <option value="es">Spanish</option>
+                        <option value="en">English</option>
+                        <option value="fr">French</option>
+                        <option value="de">German</option>
+                        <option value="it">Italian</option>
+                        <option value="pt">Portuguese</option>
+                        <option value="ru">Russian</option>
+                        <option value="zh">Chinese</option>
+                        <option value="ja">Japanese</option>
+                        <option value="ko">Korean</option>
+                    </select>
+                </div>
+                <textarea id="source-text" placeholder="Enter text to translate..." class="translator-textarea"></textarea>
+                <button id="translate-button" class="translate-button">Translate</button>
+                <div class="translated-output" id="target-text" readonly>hola mi nombre es Andrey</div>
+            </div>
+        </div>
+    </div>
+
+    <div id="calculator-overlay" class="overlay" style="display: none;">
+        <div class="overlay-content">
+            <span class="close-btn" onclick="closeOverlay('calculator-overlay')">×</span>
+            <h2>Calculator</h2>
+            <div class="calculator-container">
+                <div id="calculator-display" class="calculator-display">0</div>
+                <div class="calculator-keys">
+                    <button class="calculator-key clear" data-action="clear">C</button>
+                    <button class="calculator-key" data-action="backspace">⌫</button>
+                    <button class="calculator-key operator" data-action="operator">%</button>
+                    <button class="calculator-key operator" data-action="operator">/</button>
+                    
+                    <button class="calculator-key" data-number="7">7</button>
+                    <button class="calculator-key" data-number="8">8</button>
+                    <button class="calculator-key" data-number="9">9</button>
+                    <button class="calculator-key operator" data-action="operator">*</button>
+                    
+                    <button class="calculator-key" data-number="4">4</button>
+                    <button class="calculator-key" data-number="5">5</button>
+                    <button class="calculator-key" data-number="6">6</button>
+                    <button class="calculator-key operator" data-action="operator">-</button>
+                    
+                    <button class="calculator-key" data-number="1">1</button>
+                    <button class="calculator-key" data-number="2">2</button>
+                    <button class="calculator-key" data-number="3">3</button>
+                    <button class="calculator-key operator" data-action="operator">+</button>
+                    
+                    <button class="calculator-key" data-number="0" style="grid-column: span 2;">0</button>
+                    <button class="calculator-key" data-action="decimal">.</button>
+                    <button class="calculator-key equals" data-action="calculate">=</button>
+                </div>
+                <div class="calculator-instructions">
+                    <p>Keyboard shortcuts: Numbers, Operators (+,-,*,/), Enter (=), Backspace
+                    <p>Keyboard shortcuts: Numbers, Operators (+,-,*,/), Enter (=), Backspace</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Privacy Consent Banner -->
+    <div class="privacy-consent" id="privacy-consent">
+        <div class="privacy-consent-content">
+            <h3>We Value Your Privacy</h3>
+            <p>We use cookies to enhance your browsing experience, analyze site traffic, and personalize content. By clicking "Accept", you consent to our use of cookies as described in our <a href="#" id="open-privacy-policy">Privacy Policy</a>.</p>
+        </div>
+        <div class="privacy-buttons">
+            <button class="privacy-button accept-button" id="accept-cookies">Accept</button>
+            <button class="privacy-button decline-button" id="decline-cookies">Decline</button>
+        </div>
+    </div>
+
+    <!-- Privacy Policy Overlay -->
+    <div class="privacy-policy-overlay" id="privacy-policy-overlay">
+        <div class="privacy-policy-content">
+            <span class="close-btn" id="close-privacy-policy">×</span>
+            <h2>Privacy Policy</h2>
+            <p>Last Updated: March 10, 2025</p>
+            <h3>1. Information We Collect</h3>
+            <p>When you use Super Google, we collect:</p>
+            <ul>
+                <li>Search queries and history</li>
+                <li>Account information (email, name) when you sign up</li>
+                <li>Usage data including features accessed, time spent, and interactions</li>
+                <li>Device information (browser type, operating system, screen resolution)</li>
+            </ul>
+            <h3>2. How We Use Your Information</h3>
+            <p>We use collected information to:</p>
+            <ul>
+                <li>Improve and personalize your search experience</li>
+                <li>Authenticate users and maintain account security</li>
+                <li>Analyze usage patterns to enhance our features</li>
+                <li>Communicate updates and relevant information</li>
+            </ul>
+            <h3>3. Cookies</h3>
+            <p>We use cookies to:</p>
+            <ul>
+                <li>Remember your preferences and settings</li>
+                <li>Keep you signed in to your account</li>
+                <li>Analyze site traffic and performance</li>
+                <li>Provide personalized content and recommendations</li>
+            </ul>
+            <h3>4. Your Rights</h3>
+            <p>You have the right to:</p>
+            <ul>
+                <li>Access, correct, or delete your personal data</li>
+                <li>Withdraw consent for data processing</li>
+                <li>Request a copy of your data</li>
+                <li>Lodge a complaint with a supervisory authority</li>
+            </ul>
+            <h3>5. Security</h3>
+            <p>We implement appropriate security measures to protect your personal information from unauthorized access, alteration, disclosure, or destruction.</p>
+            <h3>6. Updates to This Policy</h3>
+            <p>We may update this policy periodically. The "Last Updated" date at the top will reflect the most recent revisions.</p>
+            <p>For questions or concerns about our privacy practices, please contact us at privacy@supergoogle.com.</p>
+        </div>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const checkbox = document.getElementById('checkbox');
+        checkbox.addEventListener('change', () => {
+            document.body.classList.toggle('dark-mode');
+            localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
+        });
+
+        // Check for saved dark mode preference
+        if (localStorage.getItem('darkMode') === 'true') {
+            document.body.classList.add('dark-mode');
+            checkbox.checked = true;
+        }
+
+        // Tab Navigation
+        document.getElementById('mission-tab').addEventListener('click', () => openOverlay('mission-overlay'));
+        document.getElementById('updates-tab').addEventListener('click', () => openOverlay('updates-overlay'));
+        document.getElementById('contact-tab').addEventListener('click', () => openOverlay('contact-overlay'));
+        document.getElementById('reviews-tab').addEventListener('click', () => openOverlay('reviews-overlay'));
+        document.getElementById('signin-tab').addEventListener('click', () => openOverlay('signin-overlay'));
+        document.getElementById('signup-tab').addEventListener('click', () => openOverlay('signup-overlay'));
+        document.getElementById('signout-tab').addEventListener('click', handleSignOut);
+        document.getElementById('translator-tab').addEventListener('click', () => openOverlay('translator-overlay'));
+        document.getElementById('calculator-tab').addEventListener('click', () => openOverlay('calculator-overlay'));
+
+        // Form toggle links
+        document.getElementById('signin-to-signup').addEventListener('click', () => {
+            closeOverlay('signin-overlay');
+            openOverlay('signup-overlay');
+        });
+
+        document.getElementById('signup-to-signin').addEventListener('click', () => {
+            closeOverlay('signup-overlay');
+            openOverlay('signin-overlay');
+        });
+
+        // Open overlay function
+        function openOverlay(id) {
+            document.getElementById(id).style.display = 'flex';
+        }
+
+        // Close overlay function
+        function closeOverlay(id) {
+            document.getElementById(id).style.display = 'none';
+        }
+
+        // Close overlay when clicking outside content
+        document.querySelectorAll('.overlay').forEach(overlay => {
+            overlay.addEventListener('click', (e) => {
+                if (e.target === overlay) {
+                    overlay.style.display = 'none';
+                }
+            });
+        });
+
+        // Handle form submissions
+        document.getElementById('contact-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            alert('Thank you for your message! We will get back to you soon.');
+            closeOverlay('contact-overlay');
+            e.target.reset();
+        });
+
+        document.getElementById('signup-form').addEventListener('submit', handleSignUp);
+        document.getElementById('signin-form').addEventListener('submit', handleSignIn);
+
+        // Privacy consent
+        setTimeout(() => {
+            if (!localStorage.getItem('cookiesAccepted')) {
+                document.getElementById('privacy-consent').classList.add('show');
+            }
+        }, 2000);
+
+        document.getElementById('accept-cookies').addEventListener('click', () => {
+            localStorage.setItem('cookiesAccepted', 'true');
+            document.getElementById('privacy-consent').classList.remove('show');
+        });
+
+        document.getElementById('decline-cookies').addEventListener('click', () => {
+            document.getElementById('privacy-consent').classList.remove('show');
+        });
+
+        document.getElementById('open-privacy-policy').addEventListener('click', (e) => {
+            e.preventDefault();
+            document.getElementById('privacy-policy-overlay').style.display = 'flex';
+        });
+
+        document.getElementById('close-privacy-policy').addEventListener('click', () => {
+            document.getElementById('privacy-policy-overlay').style.display = 'none';
+        });
+
+        // User authentication functions
+        function handleSignUp(e) {
+            e.preventDefault();
+            const name = document.getElementById('signup-name').value;
+            const email = document.getElementById('signup-email').value;
+            const password = document.getElementById('signup-password').value;
+            const confirmPassword = document.getElementById('signup-confirm-password').value;
+            
+            // Reset error messages
+            document.querySelectorAll('.error-message').forEach(el => el.style.display = 'none');
+            
+            // Validate email format
+            if (!validateEmail(email)) {
+                document.getElementById('signup-email-error').textContent = 'Please enter a valid email address';
+                document.getElementById('signup-email-error').style.display = 'block';
+                return;
+            }
+            
+            // Validate password length
+            if (password.length < 6) {
+                document.getElementById('signup-password-error').textContent = 'Password must be at least 6 characters';
+                document.getElementById('signup-password-error').style.display = 'block';
+                return;
+            }
+            
+            // Validate passwords match
+            if (password !== confirmPassword) {
+                document.getElementById('signup-confirm-error').textContent = 'Passwords do not match';
+                document.getElementById('signup-confirm-error').style.display = 'block';
+                return;
+            }
+            
+            // Check if user already exists
+            const users = JSON.parse(localStorage.getItem('users') || '[]');
+            if (users.some(user => user.email === email)) {
+                document.getElementById('signup-email-error').textContent = 'Email already registered';
+                document.getElementById('signup-email-error').style.display = 'block';
+                return;
+            }
+            
+            // Create new user
+            users.push({
+                name,
+                email,
+                password // In a real app, this should be securely hashed
+            });
+            
+            // Save user to local storage
+            localStorage.setItem('users', JSON.stringify(users));
+            
+            // Auto sign in
+            localStorage.setItem('currentUser', JSON.stringify({ name, email }));
+            updateAuthUI();
+            
+            alert('Account created successfully!');
+            closeOverlay('signup-overlay');
+            e.target.reset();
+        }
+
+        function handleSignIn(e) {
+            e.preventDefault();
+            const email = document.getElementById('signin-email').value;
+            const password = document.getElementById('signin-password').value;
+            
+            // Reset error messages
+            document.querySelectorAll('.error-message').forEach(el => el.style.display = 'none');
+            
+            // Check credentials
+            const users = JSON.parse(localStorage.getItem('users') || '[]');
+            const user = users.find(user => user.email === email && user.password === password);
+            
+            if (!user) {
+                document.getElementById('signin-general-error').textContent = 'Invalid email or password';
+                document.getElementById('signin-general-error').style.display = 'block';
+                return;
+            }
+            
+            // Save current user
+            localStorage.setItem('currentUser', JSON.stringify({ name: user.name, email: user.email }));
+            updateAuthUI();
+            
+            alert('Signed in successfully!');
+            closeOverlay('signin-overlay');
+            e.target.reset();
+        }
+
+        function handleSignOut() {
+            localStorage.removeItem('currentUser');
+            updateAuthUI();
+            alert('Signed out successfully!');
+        }
+
+        function updateAuthUI() {
+            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+            if (currentUser) {
+                document.getElementById('signin-tab').style.display = 'none';
+                document.getElementById('signup-tab').style.display = 'none';
+                document.getElementById('signout-tab').style.display = 'flex';
+            } else {
+                document.getElementById('signin-tab').style.display = 'flex';
+                document.getElementById('signup-tab').style.display = 'flex';
+                document.getElementById('signout-tab').style.display = 'none';
+            }
+        }
+
+        function validateEmail(email) {
+            const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return re.test(email);
+        }
+
+        // Check if user is logged in on page load
+        updateAuthUI();
+
+        // Translator functionality
+        document.getElementById('swap-languages').addEventListener('click', () => {
+            const sourceLang = document.getElementById('source-lang');
+            const targetLang = document.getElementById('target-lang');
+            const temp = sourceLang.value;
+            sourceLang.value = targetLang.value;
+            targetLang.value = temp;
+        });
+
+        document.getElementById('translate-button').addEventListener('click', () => {
+            const sourceText = document.getElementById('source-text').value;
+            const sourceLang = document.getElementById('source-lang').value;
+            const targetLang = document.getElementById('target-lang').value;
+            
+            // Easter egg
+            if (sourceText.toLowerCase() === 'i love super google') {
+                document.getElementById('target-text').textContent = '❤️ Super Google loves you too! ❤️';
+                return;
+            }
+            
+            // Simple translation examples
+            let translation = sourceText;
+            if (sourceLang === 'en' && targetLang === 'es') {
+                // English to Spanish examples
+                translation = translation
+                    .replace(/hello/gi, 'hola')
+                    .replace(/goodbye/gi, 'adiós')
+                    .replace(/thank you/gi, 'gracias')
+                    .replace(/please/gi, 'por favor')
+                    .replace(/yes/gi, 'sí')
+                    .replace(/no/gi, 'no')
+                    .replace(/welcome/gi, 'bienvenido')
+                    .replace(/friend/gi, 'amigo')
+                    .replace(/good morning/gi, 'buenos días')
+                    .replace(/good night/gi, 'buenas noches')
+                    .replace(/how are you/gi, '¿cómo estás?')
+                    .replace(/my name is/gi, 'me llamo')
+                    .replace(/sorry/gi, 'lo siento')
+                    .replace(/excuse me/gi, 'perdón')
+                    .replace(/water/gi, 'agua')
+                    .replace(/food/gi, 'comida')
+                    .replace(/restaurant/gi, 'restaurante')
+                    .replace(/bathroom/gi, 'baño')
+                    .replace(/hotel/gi, 'hotel')
+                    .replace(/airport/gi, 'aeropuerto')
+                    .replace(/train/gi, 'tren')
+                    .replace(/bus/gi, 'autobús')
+                    .replace(/car/gi, 'coche')
+                    .replace(/beach/gi, 'playa')
+                    .replace(/city/gi, 'ciudad')
+                    .replace(/house/gi, 'casa')
+                    .replace(/family/gi, 'familia')
+                    .replace(/love/gi, 'amor');
+            } else if (sourceLang === 'es' && targetLang === 'en') {
+                // Spanish to English examples
+                translation = translation
+                    .replace(/hola/gi, 'hello')
+                    .replace(/adiós/gi, 'goodbye')
+                    .replace(/gracias/gi, 'thank you')
+                    .replace(/por favor/gi, 'please')
+                    .replace(/sí/gi, 'yes')
+                    .replace(/no/gi, 'no')
+                    .replace(/bienvenido/gi, 'welcome')
+                    .replace(/amigo/gi, 'friend')
+                    .replace(/buenos días/gi, 'good morning')
+                    .replace(/buenas noches/gi, 'good night')
+                    .replace(/¿cómo estás\?/gi, 'how are you')
+                    .replace(/me llamo/gi, 'my name is')
+                    .replace(/lo siento/gi, 'sorry')
+                    .replace(/perdón/gi, 'excuse me')
+                    .replace(/agua/gi, 'water')
+                    .replace(/comida/gi, 'food')
+                    .replace(/restaurante/gi, 'restaurant')
+                    .replace(/baño/gi, 'bathroom')
+                    .replace(/hotel/gi, 'hotel')
+                    .replace(/aeropuerto/gi, 'airport')
+                    .replace(/tren/gi, 'train')
+                    .replace(/autobús/gi, 'bus')
+                    .replace(/coche/gi, 'car')
+                    .replace(/playa/gi, 'beach')
+                    .replace(/ciudad/gi, 'city')
+                    .replace(/casa/gi, 'house')
+                    .replace(/familia/gi, 'family')
+                    .replace(/amor/gi, 'love');
+            }
+            
+            document.getElementById('target-text').textContent = translation || 'Translation not available';
+        });
+
+        // Calculator functionality
+        const calculator = {
+            displayValue: '0',
+            firstOperand: null,
+            waitingForSecondOperand: false,
+            operator: null
+        };
+
+        function updateDisplay() {
+            document.getElementById('calculator-display').textContent = calculator.displayValue;
+        }
+
+        function inputDigit(digit) {
+            const { displayValue, waitingForSecondOperand } = calculator;
+            
+            if (waitingForSecondOperand) {
+                calculator.displayValue = digit;
+                calculator.waitingForSecondOperand = false;
+            } else {
+                calculator.displayValue = displayValue === '0' ? digit : displayValue + digit;
+            }
+        }
+
+        function inputDecimal(dot) {
+            if (calculator.waitingForSecondOperand) {
+                calculator.displayValue = '0.';
+                calculator.waitingForSecondOperand = false;
+                return;
+            }
+            
+            if (!calculator.displayValue.includes(dot)) {
+                calculator.displayValue += dot;
+            }
+        }
+
+        function handleOperator(nextOperator) {
+            const { firstOperand, displayValue, operator } = calculator;
+            const inputValue = parseFloat(displayValue);
+            
+            if (operator && calculator.waitingForSecondOperand) {
+                calculator.operator = nextOperator;
+                return;
+            }
+            
+            if (firstOperand === null && !isNaN(inputValue)) {
+                calculator.firstOperand = inputValue;
+            } else if (operator) {
+                const result = calculate(firstOperand, inputValue, operator);
+                calculator.displayValue = `${parseFloat(result.toFixed(7))}`;
+                calculator.firstOperand = result;
+            }
+            
+            calculator.waitingForSecondOperand = true;
+            calculator.operator = nextOperator;
+        }
+
+        function calculate(firstOperand, secondOperand, operator) {
+            if (operator === '+') {
+                return firstOperand + secondOperand;
+            } else if (operator === '-') {
+                return firstOperand - secondOperand;
+            } else if (operator === '*') {
+                return firstOperand * secondOperand;
+            } else if (operator === '/') {
+                return firstOperand / secondOperand;
+            } else if (operator === '%') {
+                return firstOperand % secondOperand;
+            }
+            
+            return secondOperand;
+        }
+
+        function resetCalculator() {
+            calculator.displayValue = '0';
+            calculator.firstOperand = null;
+            calculator.waitingForSecondOperand = false;
+            calculator.operator = null;
+        }
+
+        function backspace() {
+            if (calculator.displayValue.length > 1) {
+                calculator.displayValue = calculator.displayValue.slice(0, -1);
+            } else {
+                calculator.displayValue = '0';
+            }
+        }
+
+        // Add event listeners to calculator keys
+        document.querySelector('.calculator-keys').addEventListener('click', (event) => {
+            const { target } = event;
+            
+            if (!target.matches('button')) {
+                return;
+            }
+            
+            if (target.dataset.action === 'operator') {
+                handleOperator(target.textContent);
+                updateDisplay();
+                return;
+            }
+            
+            if (target.dataset.action === 'decimal') {
+                inputDecimal(target.textContent);
+                updateDisplay();
+                return;
+            }
+            
+            if (target.dataset.action === 'clear') {
+                resetCalculator();
+                updateDisplay();
+                return;
+            }
+            
+            if (target.dataset.action === 'calculate') {
+                handleOperator('=');
+                updateDisplay();
+                return;
+            }
+            
+            if (target.dataset.action === 'backspace') {
+                backspace();
+                updateDisplay();
+                return;
+            }
+            
+            if (target.dataset.number !== undefined) {
+                inputDigit(target.dataset.number);
+                updateDisplay();
+            }
+        });
+
+        // Add keyboard support for calculator
+        document.addEventListener('keydown', (event) => {
+            if (document.getElementById('calculator-overlay').style.display !== 'flex') {
+                return;
+            }
+            
+            const { key } = event;
+            
+            if (/\d/.test(key)) {
+                event.preventDefault();
+                inputDigit(key);
+                updateDisplay();
+                return;
+            }
+            
+            if (key === '.') {
+                event.preventDefault();
+                inputDecimal(key);
+                updateDisplay();
+                return;
+            }
+            
+            if (key === 'Backspace') {
+                event.preventDefault();
+                backspace();
+                updateDisplay();
+                return;
+            }
+            
+            if (key === 'Escape') {
+                event.preventDefault();
+                resetCalculator();
+                updateDisplay();
+                return;
+            }
+            
+            if (key === 'Enter' || key === '=') {
+                event.preventDefault();
+                handleOperator('=');
+                updateDisplay();
+                return;
+            }
+            
+            if (['+', '-', '*', '/', '%'].includes(key)) {
+                event.preventDefault();
+                handleOperator(key);
+                updateDisplay();
+                return;
+            }
+        });
+    </script>
+</body>
+</html>
